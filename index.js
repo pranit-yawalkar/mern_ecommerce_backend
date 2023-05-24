@@ -13,6 +13,7 @@ import brandRoutes from "./routes/brandRoutes.js";
 import couponRoutes from "./routes/couponRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import colorRoutes from "./routes/colorRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import cors from "cors";
 
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/api/brand", brandRoutes);
 app.use("/api/coupon", couponRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/color", colorRoutes);
+app.use("/api/image", uploadRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);

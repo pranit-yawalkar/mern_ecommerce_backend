@@ -28,9 +28,9 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     brand: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       //   enum: ["Apple", "Samsung", "Lenovo"],
-      required: true,
+      ref: "Brand",
     },
     color: [{ type: mongoose.Schema.Types.ObjectId, ref: "Color" }],
     tag: {
@@ -45,9 +45,12 @@ const productSchema = new mongoose.Schema(
       default: 0,
       select: false,
     },
-    images: {
-      type: Array,
-    },
+    images: [
+      {
+        public_id: String,
+        url: String,
+      },
+    ],
     ratings: [
       {
         star: Number,

@@ -2,11 +2,6 @@ import Product from "../models/Product.js";
 import User from "../models/User.js";
 import slugify from "slugify";
 import validateId from "../utils/validateId.js";
-import {
-  cloudinaryUploadImage,
-  cloudinaryDeleteImage,
-} from "../utils/cloudinary.js";
-import fs from "fs";
 
 export const createProduct = async (req, res) => {
   try {
@@ -30,7 +25,7 @@ export const getProducts = async (req, res) => {
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    let query = Product.find(JSON.parse(queryStr));
+    let query = Product.find(JSON.parse(queryStr)).populate("brand");
 
     // Sorting
     if (req.query.sort) {
@@ -211,38 +206,6 @@ export const rateProduct = async (req, res) => {
     );
 
     return res.status(200).json(updatedProduct);
-  } catch (error) {
-    return res.status(500).json({ error });
-  }
-};
-
-export const uploadImages = async (req, res) => {
-  try {
-    const uploader = (path) => cloudinaryUploadImage(path, "images");
-    const urls = [];
-    const files = req.files;
-    for (const file of files) {
-      const { path } = file;
-      const newPath = await uploader(path);
-      urls.push(newPath);
-      fs.unlinkSync(path);
-    }
-
-    const images = urls.map((file) => {
-      return file;
-    });
-
-    return res.status(200).json(images);
-  } catch (error) {
-    return res.status(500).json({ error });
-  }
-};
-
-export const deleteImages = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const deleted = cloudinaryDeleteImage(id, "images");
-    return res.status(200).json(deleted);
   } catch (error) {
     return res.status(500).json({ error });
   }

@@ -255,22 +255,24 @@ export const emptyCart = async (req, res) => {
 //   }
 // };
 
-// export const getOrders = async (req, res) => {
-//   const { _id } = req.user;
-//   validateId(_id);
-//   try {
-//     const orders = await Order.findOne({ orderBy: _id })
-//       .populate("products.product")
-//       .exec();
-//     if (!orders) {
-//       return res.status(404).json({ message: "No orders found" });
-//     }
+export const getOrders = async (req, res) => {
+  const { _id } = req.user;
+  validateId(_id);
+  try {
+    const orders = await Order.find()
+      .populate("user")
+      .populate("orderItems.product")
+      .populate("orderItems.color")
+      .sort("-createdAt");
+    if (!orders) {
+      return res.status(404).json({ message: "No orders found" });
+    }
 
-//     return res.status(200).json(orders);
-//   } catch (error) {
-//     return res.status(500).json(error);
-//   }
-// };
+    return res.status(200).json(orders);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
 
 // export const updateOrderStatus = async (req, res) => {
 //   const { status } = req.body;

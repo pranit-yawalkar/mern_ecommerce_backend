@@ -6,6 +6,7 @@ import {
   deleteUser,
   emptyCart,
   getMyOrders,
+  getOrders,
   getUser,
   getUserCart,
   getUsers,
@@ -21,13 +22,14 @@ import { checkout, verifyPayment } from "../controllers/paymentController.js";
 
 const router = express.Router();
 
-router.get("/getUsers", getUsers);
+router.get("/getUsers", authMiddleware, isAdmin, getUsers);
 router.get("/test", (req, res) => {
   return res.status(200).send("route is working fine");
 });
 router.get("/wishlist", authMiddleware, getWishlist);
 router.get("/cart", authMiddleware, getUserCart);
 router.get("/orders", authMiddleware, getMyOrders);
+router.get("/orders/all", authMiddleware, isAdmin, getOrders);
 router.get("/:id", authMiddleware, isAdmin, getUser);
 
 router.post("/cart", authMiddleware, addToCart);
